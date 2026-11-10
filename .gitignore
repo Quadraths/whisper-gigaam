@@ -17,6 +17,7 @@ tools/
 
 # Локальные настройки
 .env
+portable/client.env
 
 # Тестовые артефакты
 example.wav
