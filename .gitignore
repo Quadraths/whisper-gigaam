@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Кэш моделей GigaAM и локальный ffmpeg
+models/
+tools/
+.uv-cache/
+
+# Локальные настройки
+.env
+
+# Тестовые артефакты
+example.wav
+*.log
+
+# Логи сервиса
+logs/

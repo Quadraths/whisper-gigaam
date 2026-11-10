@@ -1,0 +1,50 @@
+[project]
+name = "whisper-gigaam"
+version = "0.1.0"
+description = "Локальный сервер транскрибации русской речи на GigaAM"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "quadraths", email = "quadraths@mail.ru" }
+]
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    # GigaAM v0.2.0 (модели v3) ставится из git — на PyPI устаревший v0.1.0 (только v1/v2)
+    "gigaam[torch]>=0.2.0",
+    # CUDA-сборки PyTorch для GTX 1080 Ti (sm_61) берутся с индекса pytorch-cu126 ниже:
+    # на PyPI для Windows лежат CPU-only колёса.
+    "torch==2.8.0+cu126",
+    "torchaudio==2.8.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "python-multipart>=0.0.9",
+    # голосовой ввод (whisper_gigaam.voice)
+    "sounddevice>=0.5.0",
+    "pynput>=1.7.6",
+    "httpx>=0.27.0",
+]
+
+[project.scripts]
+whisper-gigaam = "whisper_gigaam.server:main"
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
+
+# Целимся только в Windows/Linux: колёса torch+cu126 не существуют для macOS.
+[tool.uv]
+environments = ["sys_platform == 'win32'", "sys_platform == 'linux'"]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'win32' or sys_platform == 'linux'" },
+]
+torchaudio = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'win32' or sys_platform == 'linux'" },
+]
+gigaam = { git = "https://github.com/salute-developers/GigaAM.git" }
